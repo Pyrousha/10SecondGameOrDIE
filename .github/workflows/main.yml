@@ -40,7 +40,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
         with:
-          projectPath: ../..
+          projectPath: Library
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # Build

@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D heroRB;
     [SerializeField] private Animator anim;
+    [SerializeField] private Transform interactTransform;
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float accelSpeed;
     [SerializeField] private float frictionSpeed;
@@ -122,5 +123,15 @@ public class PlayerController : MonoBehaviour
         velocity.z = newSpeedZ;
 
         heroRB.velocity = new Vector2(velocity.x, velocity.z);
+
+        Vector2 angleFacing = new Vector2(velocity.x, velocity.z);
+        if (angleFacing.magnitude > 0.2f)
+        {
+            angleFacing.Normalize();
+
+            float angle = Mathf.Atan2(angleFacing.y, angleFacing.x) - Mathf.Atan2(0, 1);
+            angle = angle * 360 / (2 * Mathf.PI);
+            interactTransform.localEulerAngles = new Vector3(0, 0, angle);
+        }
     }
 }

@@ -11,4 +11,9 @@ public class TriggerEvent : MonoBehaviour
     {
         eventToDo.Invoke();
     }
+
+    public void DoEvent()
+    {
+        eventToDo.Invoke();
+    }
 }

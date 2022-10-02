@@ -19,7 +19,7 @@ public class TimerController : MonoBehaviour
     {
         timeLeft = maxTime;
         //countingDown = true;
-        secondsText.text = Mathf.FloorToInt(timeLeft).ToString();
+        UpdateTimer();
     }
 
     // Update is called once per frame
@@ -38,14 +38,18 @@ public class TimerController : MonoBehaviour
             countingDown = false; 
             UpdateTimer();
             secondsText.text = "RIP";
+
+            GetComponent<TriggerEvent>().DoEvent();
+
+            timeLeft = maxTime;
         }
 
     }
 
-    void UpdateTimer()
+    public void UpdateTimer()
     {
         secondsText.text = Mathf.FloorToInt(timeLeft).ToString();
-        secondSlider.value = (timeLeft % 1);
+        secondSlider.value = (timeLeft % 1) + Mathf.FloorToInt(timeLeft/maxTime);
     }
 
     public void ToggleCounting()

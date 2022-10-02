@@ -16,8 +16,8 @@ TagManager:
   - RoomBound
   - PlayerTriggerHitbox
   - Trigger-PlayerOnly
-  - 
-  - 
+  - PlayerInteractHitbox
+  - Interactable
   - 
   - 
   - 

@@ -52,6 +52,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
         with:
+          allowDirtyBuild: true
           versioning: Semantic
           targetPlatform: WebGL
 

@@ -10,13 +10,6 @@ env:
   UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
 
-name: GameCI Template 🎮
-
-on: push
-
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-
 jobs:
   testRunner:
     name: Test in ${{ matrix.testMode }} ✨
@@ -214,7 +207,6 @@ jobs:
         with:
           branch: deploy
           folder: build/WebGL
-
 ### Old section
 
 # jobs:

@@ -5,51 +5,58 @@ on:
     branches:
       - main
 
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
-  UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
-  UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
+# env:
+#   UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
+#   UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
+#   UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
 
 jobs:
-  buildWebGL:
-    # needs: testRunner
-    name: Build for WebGL 🖥️
+  build:
+    name: Build my project ✨
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     steps:
       # Checkout
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Create LFS file list
-        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
-
-      - name: Restore LFS cache
-        uses: actions/cache@v2
-        id: lfs-cache
         with:
-          path: .git/lfs
-          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+          fetch-depth: 0
+          lfs: true
 
-      - name: Git LFS Pull
-        run: |
-          git lfs pull
-          git add .
-          git reset --hard
-      - name: Restore Library cache
-        uses: actions/cache@v2
+      # Cache
+      - uses: actions/cache@v2
         with:
           path: Library
-          key: Library-build-WebGL
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-build-
             Library-
-      - uses: game-ci/unity-builder@v2
+
+      # Test
+      - name: Unity - Test runner
+        uses: game-ci/unity-test-runner@v2.0.3
+        env:
+          UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
         with:
+          projectPath: ../..
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build
+      - name: Build project
+        uses: game-ci/unity-builder@v2
+        id: myBuildStep
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
+          UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
+        with:
+          versioning: Semantic
           targetPlatform: WebGL
 
+      # Output
       - uses: actions/upload-artifact@v2
         with:
-          name: build-WebGL
-          path: build/WebGL
+          name: Build
+          path: build

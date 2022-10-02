@@ -1,51 +1,54 @@
-name: Unity GameCI Actions 😎
+name: Unity GameCI Template 🎮
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
+  UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
 
 jobs:
-  build:
-    name: Build my project ✨
+  buildWebGL:
+    # needs: testRunner
+    name: Build for WebGL 🖥️
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
     steps:
-      # Checkout
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          lfs: true
 
-      # Cache
-      - uses: actions/cache@v2
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v2
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+      - name: Restore Library cache
+        uses: actions/cache@v2
         with:
           path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-build-WebGL
           restore-keys: |
+            Library-build-
             Library-
-            Library-10SecondGameOrDIE
-
-      # Test
-      # - name: Run tests
-      #   uses: game-ci/unity-test-runner@v2
-      #   env:
-      #     UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      #   with:
-      #     githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-      # Build
-      - name: Build project
-        uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
-          UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
+      - uses: game-ci/unity-builder@v2
         with:
           targetPlatform: WebGL
 
-      # Output
-      - uses: game-ci/unity-builder@v2
-        id: myBuildStep
-      - run: echo 'Project Version: ${{ steps.myBuildStep.outputs.buildVersion }}'
-
       - uses: actions/upload-artifact@v2
         with:
-          name: Build
-          path: build
+          name: build-WebGL
+          path: build/WebGL

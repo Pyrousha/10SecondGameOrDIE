@@ -16,4 +16,9 @@ public class TriggerEvent : MonoBehaviour
     {
         eventToDo.Invoke();
     }
+
+    public void _TimeUp()
+    {
+        DeathController.Instance.OnDeath();
+    }
 }

@@ -23,32 +23,27 @@ public class InventoryManager : Singleton<InventoryManager>
         if (InputHandler.Instance.Grab.down)
         {
             Collider2D hitItem = Physics2D.OverlapCircle(playerInteractTransform.position, 0.5f, grabbaleLayer);
-            if (hitItem != null) //Hit an interactable
+            if ((hitItem != null) && (hitItem.GetComponent<GrabbableID>().CanPickUp)) //Hit an interactable
             {
                 if (currEquippedItem != null)
                 {
                     //put equipped item back on ground
-                    currEquippedItem.transform.position = playerInteractTransform.position;
-                    currEquippedItem.gameObject.SetActive(true);
-                    currEquippedItem.ChangeState(GrabbableID.itemState.moved);
+                    currEquippedItem.PutDown(playerInteractTransform.position);
                 }
 
                 //pick up new item
                 currEquippedItem = hitItem.GetComponent<GrabbableID>();
-                inventorySlotImage.sprite = currEquippedItem.GetComponent<SpriteRenderer>().sprite;
+                inventorySlotImage.sprite = currEquippedItem.Sprite;
                 inventorySlotImage.color = Color.white;
 
-                currEquippedItem.gameObject.SetActive(false);
-                currEquippedItem.ChangeState(GrabbableID.itemState.equipped);
+                currEquippedItem.PickedUp();
             }
             else
             {
                 if (currEquippedItem != null) //put equipped on ground
                 {
                     //put equipped item back on ground
-                    currEquippedItem.transform.position = playerInteractTransform.position;
-                    currEquippedItem.gameObject.SetActive(true);
-                    currEquippedItem.ChangeState(GrabbableID.itemState.moved);
+                    currEquippedItem.PutDown(playerInteractTransform.position);
 
                     inventorySlotImage.color = Color.clear;
 
@@ -75,7 +70,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
         inventorySlotImage.color = Color.clear;
 
-        currEquippedItem.ChangeState(GrabbableID.itemState.consumed);
+        currEquippedItem.Consumed();
 
         currEquippedItem = null;
     }

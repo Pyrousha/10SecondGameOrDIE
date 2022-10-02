@@ -37,14 +37,13 @@ jobs:
             Library-
 
       # Test
-      - name: Unity - Test runner
+      - name: Unity Run Tests
         uses: game-ci/unity-test-runner@v2.0.3
-        env:
-          UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
-          UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
+        id: testRunner
         with:
-          # projectPath: Library
+          projectPath: Library
+          testMode: ${{ matrix.testMode }}
+          checkName: ${{ matrix.testMode }} test results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-artifact@v2

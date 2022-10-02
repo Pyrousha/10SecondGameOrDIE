@@ -8,6 +8,7 @@ public class PlayerRoomTrigger : MonoBehaviour
     [SerializeField] private float cameraSpeed;
 
     private Collider2D currRoom;
+    private Coroutine currLerp;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -15,7 +16,9 @@ public class PlayerRoomTrigger : MonoBehaviour
             return;
 
         currRoom = collision;
-        StartCoroutine(CameraLerp(collision.transform.position));
+        if (currLerp != null)
+            StopCoroutine(currLerp);
+        currLerp = StartCoroutine(CameraLerp(collision.transform.position));
     }
 
     private IEnumerator CameraLerp(Vector3 targPos)

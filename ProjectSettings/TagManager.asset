@@ -14,8 +14,8 @@ TagManager:
   - Player
   - Wall
   - RoomBound
-  - PlayerRoomTrigger
-  - 
+  - PlayerTriggerHitbox
+  - Trigger-PlayerOnly
   - 
   - 
   - 
@@ -44,11 +44,14 @@ TagManager:
   - name: BG
     uniqueID: 2792415869
     locked: 0
-  - name: Objects
+  - name: Objects-Back
     uniqueID: 3020465905
     locked: 0
   - name: Entities
     uniqueID: 559386885
+    locked: 0
+  - name: Objects-Front
+    uniqueID: 1088220135
     locked: 0
   - name: UI
     uniqueID: 4247021125

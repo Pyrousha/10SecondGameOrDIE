@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D heroRB;
+    [SerializeField] private Animator anim;
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float accelSpeed;
     [SerializeField] private float frictionSpeed;
@@ -31,6 +32,8 @@ public class PlayerController : MonoBehaviour
         //rb.velocity = InputHandler.Instance.Direction * moveSpeed;
 
         ApplyFrictionAndAcceleration();
+
+        anim.SetFloat("HSpeed", heroRB.velocity.x + 0.2f*heroRB.velocity.y);
     }
 
     public void ApplyFrictionAndAcceleration()

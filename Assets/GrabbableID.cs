@@ -11,7 +11,8 @@ public class GrabbableID : MonoBehaviour
         moved,
         equipped,
         inGrave,
-        consumed
+        consumed,
+        inChest
     }
 
     private itemState state = itemState.untouched;
@@ -32,7 +33,7 @@ public class GrabbableID : MonoBehaviour
 
     public Sprite Sprite => itemSprite.sprite;
 
-    public bool CanPickUp => ((state != itemState.equipped) && (state != itemState.consumed));
+    public bool CanPickUp => ((state != itemState.equipped) && (state != itemState.consumed) && (state != itemState.inChest));
 
     public void ChangeState(itemState newState)
     {
@@ -73,6 +74,11 @@ public class GrabbableID : MonoBehaviour
                     ResetPosition();
                     break;
                 }
+            case itemState.inChest:
+                {
+                    //no need to do anything
+                    break;
+                }
         }
     }
 
@@ -100,6 +106,16 @@ public class GrabbableID : MonoBehaviour
         graveSprite.enabled = false;
 
         ChangeState(itemState.moved);
+
+        transform.position = newPos;
+    }
+
+    public void PutInChest(Vector3 newPos)
+    {
+        itemSprite.enabled = false;
+        graveSprite.enabled = false;
+
+        ChangeState(itemState.inChest);
 
         transform.position = newPos;
     }

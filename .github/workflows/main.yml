@@ -4,14 +4,11 @@ on:
   push:
     branches:
       - main
-<<<<<<< HEAD
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
   UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
-=======
->>>>>>> 0d8e8c7cc535e1bda89677682c31e1c806349837
 
 jobs:
   buildWebGL:
@@ -21,6 +18,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
+      # Checkout
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -50,6 +48,15 @@ jobs:
       - uses: game-ci/unity-builder@v2
         with:
           targetPlatform: WebGL
+
+      # Cache
+      - uses: actions/cache@v2
+  with:
+    path: path/to/your/project/Library
+    key: Library-MyProjectName-TargetPlatform
+    restore-keys: |
+      Library-MyProjectName-
+      Library-
 
       - uses: actions/upload-artifact@v2
         with:

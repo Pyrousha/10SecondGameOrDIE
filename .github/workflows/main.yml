@@ -4,11 +4,14 @@ on:
   push:
     branches:
       - main
+<<<<<<< HEAD
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_CODE_YEAH }}
   UNITY_EMAIL: ${{ secrets.XANDER_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.XANDER_PASSWORD }}
+=======
+>>>>>>> 0d8e8c7cc535e1bda89677682c31e1c806349837
 
 jobs:
   buildWebGL:

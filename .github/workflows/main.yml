@@ -49,15 +49,6 @@ jobs:
         with:
           targetPlatform: WebGL
 
-      # Cache
-      - uses: actions/cache@v2
-  with:
-    path: path/to/your/project/Library
-    key: Library-MyProjectName-TargetPlatform
-    restore-keys: |
-      Library-MyProjectName-
-      Library-
-
       - uses: actions/upload-artifact@v2
         with:
           name: build-WebGL

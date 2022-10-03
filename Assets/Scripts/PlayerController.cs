@@ -12,13 +12,18 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float frictionSpeed;
     private Vector3 velocity;
 
-    private bool canMove = true;
+    private bool canMove = false;
     public void SetCanMove(bool newCanMove)
     {
         canMove = newCanMove;
     }
 
     private Vector2 inputVect;
+
+    private void Start()
+    {
+        canMove = MainMenuCanvas.Instance.canPlayerMove;
+    }
 
     // Update is called once per frame
     void Update()

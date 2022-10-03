@@ -99,24 +99,27 @@ public class InventoryManager : Singleton<InventoryManager>
 
     private bool TryInteract()
     {
-        Collider2D hitInteract = Physics2D.OverlapCircle(playerInteractTransform.position, 0.5f, interactLayer);
-        if (hitInteract != null) //Hit an interactable
-        {
-            ChestInteractable cInteract = hitInteract.GetComponent<ChestInteractable>();
+        bool toReturn = false;
+
+        Collider2D[] hitInteract = Physics2D.OverlapCircleAll(playerInteractTransform.position, 0.25f, interactLayer);
+        for(int i = 0; i< hitInteract.Length; i++)
+        { 
+            ChestInteractable cInteract = hitInteract[i].GetComponent<ChestInteractable>();
             if(cInteract!= null)
             {
                 cInteract.OnInteracted();
-                return true;
+                toReturn = true;
+                continue;
             }
 
             if (currEquippedItem == null)
-                return false;
+                continue;
 
-            hitInteract.GetComponent<Interactable>().OnInteracted(currEquippedItem.ID);
-            return true;
+            hitInteract[i].GetComponent<Interactable>().OnInteracted(currEquippedItem.ID);
+            toReturn = true;
         }
 
-        return false;
+        return toReturn;
     }
 }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class TPCanvasController : Singleton<TPCanvasController>
 {
     [SerializeField] private Animator anim;
+    public Animator Anim => anim;
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform cameraTransform;

@@ -12,6 +12,14 @@ public class MainMenuCanvas : Singleton<MainMenuCanvas>
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Update()
+    {
+        if(InputHandler.Instance.Grab.down || InputHandler.Instance.Interact.down)
+        {
+            StartGame();
+        }
+    }
+
     public void StartGame()
     {
         PlayerController.Instance.SetCanMove(true);

@@ -14,12 +14,30 @@ public class DeathController : Singleton<DeathController>
     }
 
     public void OnDeath()
+    { 
+
+        PlayerController.Instance.SetCanMove(false);
+        PlayerController.Instance.Anim.SetTrigger("Die");
+
+        StartCoroutine(SpawnGraveAndTransitionScene());
+
+        //ReloadScene();
+    }
+
+    public IEnumerator SpawnGraveAndTransitionScene()
     {
+        yield return new WaitForSeconds(1.05f);
+
         foreach (GrabbableID grab in grabbables)
         {
             grab.OnDeath();
         }
 
+        yield return new WaitForSeconds(0.25f);
+
+        TPCanvasController.Instance.Anim.SetTrigger("ClearToBlack");
+
+        yield return new WaitForSeconds(10f / 60f);
         ReloadScene();
     }
 

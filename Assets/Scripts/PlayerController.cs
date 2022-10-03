@@ -6,6 +6,7 @@ public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] private Rigidbody2D heroRB;
     [SerializeField] private Animator anim;
+    public Animator Anim => anim;
     [SerializeField] private Transform interactTransform;
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float accelSpeed;

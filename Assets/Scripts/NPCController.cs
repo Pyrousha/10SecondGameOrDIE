@@ -10,6 +10,9 @@ public class NPCController : MonoBehaviour
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float accelSpeed;
     [SerializeField] private float frictionSpeed;
+
+    [SerializeField] private GameObject mainCam;
+    [SerializeField] private GameObject endCam;
     private Vector3 velocity;
 
     [SerializeField] private Transform targPos;
@@ -37,11 +40,33 @@ public class NPCController : MonoBehaviour
                 {
                     canMove = false;
                     heartAnim.enabled = true;
+
+                    StartCoroutine(HeroReached());
                 }
             }
         }
         else
             inputVect = Vector2.zero;
+    }
+
+    IEnumerator HeroReached()
+    {
+        yield return new WaitForSeconds(3f);
+
+        heartAnim.SetTrigger("ByeHeart");
+
+        anim.SetTrigger("Die");
+        PlayerController.Instance.Anim.SetTrigger("Die");
+        PlayerController.Instance.transform.localScale = new Vector3(-1, 1, 1);
+
+        yield return new WaitForSeconds(2);
+
+        TPCanvasController.Instance.Anim.SetTrigger("ClearToBlack");
+
+        yield return new WaitForSeconds(10f / 60f);
+
+        endCam.SetActive(true);
+        mainCam.SetActive(false);
     }
 
     private void FixedUpdate()

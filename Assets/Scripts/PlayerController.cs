@@ -12,7 +12,11 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float frictionSpeed;
     private Vector3 velocity;
 
-    private bool canMove;
+    private bool canMove = true;
+    public void SetCanMove(bool newCanMove)
+    {
+        canMove = newCanMove;
+    }
 
     private Vector2 inputVect;
 
@@ -25,7 +29,10 @@ public class PlayerController : Singleton<PlayerController>
     // Update is called once per frame
     void Update()
     {
-        inputVect = InputHandler.Instance.Direction;
+        if (canMove)
+            inputVect = InputHandler.Instance.Direction;
+        else
+            inputVect = Vector2.zero;
     }
 
     private void FixedUpdate()

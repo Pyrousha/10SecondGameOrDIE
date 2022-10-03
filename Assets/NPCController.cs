@@ -2,29 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : Singleton<PlayerController>
+public class NPCController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D heroRB;
     [SerializeField] private Animator anim;
-    [SerializeField] private Transform interactTransform;
+    [SerializeField] private Animator heartAnim;
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float accelSpeed;
     [SerializeField] private float frictionSpeed;
     private Vector3 velocity;
 
-    private bool canMove = true;
-    public void SetCanMove(bool newCanMove)
-    {
-        canMove = newCanMove;
-    }
+    [SerializeField] private Transform targPos;
 
-    private Vector2 inputVect;
+    public bool canMove { get; set; }
+
+    Vector2 inputVect;
+
+    float scale = 0.5f;
 
     // Update is called once per frame
     void Update()
     {
         if (canMove)
-            inputVect = InputHandler.Instance.Direction;
+        {
+            Vector3 dirToTarg = targPos.position - transform.position;
+            inputVect = new Vector2(dirToTarg.x/scale, dirToTarg.y/scale);
+            if(inputVect.magnitude > 1)
+            {
+                inputVect.Normalize();
+            }
+            else
+            {
+                if(inputVect.magnitude <= 0.1f)
+                {
+                    canMove = false;
+                    heartAnim.enabled = true;
+                }
+            }
+        }
         else
             inputVect = Vector2.zero;
     }
@@ -124,15 +139,5 @@ public class PlayerController : Singleton<PlayerController>
         velocity.z = newSpeedZ;
 
         heroRB.velocity = new Vector2(velocity.x, velocity.z);
-
-        Vector2 angleFacing = new Vector2(velocity.x, velocity.z);
-        if (angleFacing.magnitude > 0.2f)
-        {
-            angleFacing.Normalize();
-
-            float angle = Mathf.Atan2(angleFacing.y, angleFacing.x) - Mathf.Atan2(0, 1);
-            angle = angle * 360 / (2 * Mathf.PI);
-            interactTransform.localEulerAngles = new Vector3(0, 0, angle);
-        }
     }
 }

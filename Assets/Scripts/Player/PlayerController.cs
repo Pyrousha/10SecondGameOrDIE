@@ -12,20 +12,27 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float frictionSpeed;
     private Vector3 velocity;
 
-    private bool canMove;
+    private bool canMove = true;
+    public void SetCanMove(bool newCanMove)
+    {
+        canMove = newCanMove;
+    }
 
     private Vector2 inputVect;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        inputVect = InputHandler.Instance.Direction;
+        if (canMove)
+            inputVect = InputHandler.Instance.Direction;
+        else
+            inputVect = Vector2.zero;
     }
 
     private void FixedUpdate()
@@ -34,7 +41,7 @@ public class PlayerController : Singleton<PlayerController>
 
         ApplyFrictionAndAcceleration();
 
-        anim.SetFloat("HSpeed", heroRB.velocity.x + 0.2f*heroRB.velocity.y);
+        anim.SetFloat("HSpeed", heroRB.velocity.x + 0.2f * heroRB.velocity.y);
     }
 
     public void ApplyFrictionAndAcceleration()
